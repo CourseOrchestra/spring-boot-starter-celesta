@@ -1,0 +1,93 @@
+{
+  "groups": [
+    {
+      "name": "celesta",
+      "type": "ru.curs.celesta.spring.boot.autoconfigure.CelestaProperties",
+      "sourceType": "ru.curs.celesta.spring.boot.autoconfigure.CelestaProperties"
+    },
+    {
+      "name": "celesta.jdbc",
+      "type": "ru.curs.celesta.spring.boot.autoconfigure.CelestaProperties$JdbcProperties",
+      "sourceType": "ru.curs.celesta.spring.boot.autoconfigure.CelestaProperties$JdbcProperties"
+    },
+    {
+      "name": "celesta.h2",
+      "type": "ru.curs.celesta.spring.boot.autoconfigure.CelestaProperties$H2Properties",
+      "sourceType": "ru.curs.celesta.spring.boot.autoconfigure.CelestaProperties$H2Properties"
+    }
+  ],
+  "properties": [
+    {
+      "name": "celesta.scorePath",
+      "type": "java.lang.String",
+      "sourceType": "ru.curs.celesta.spring.boot.autoconfigure.CelestaProperties",
+      "description": "The path to the score.",
+      "defaultValue": "src/main/resources/score"
+    },
+    {
+      "name": "celesta.jdbc.url",
+      "type": "java.lang.String",
+      "sourceType": "ru.curs.celesta.spring.boot.autoconfigure.CelestaProperties$JdbcProperties",
+      "description": "Jdbc connection url."
+    },
+    {
+      "name": "celesta.jdbc.username",
+      "type": "java.lang.String",
+      "sourceType": "ru.curs.celesta.spring.boot.autoconfigure.CelestaProperties$JdbcProperties",
+      "description": "Username for jdbc connection."
+    },
+    {
+      "name": "celesta.jdbc.password",
+      "type": "java.lang.String",
+      "sourceType": "ru.curs.celesta.spring.boot.autoconfigure.CelestaProperties$JdbcProperties",
+      "description": "Password for jdbc connection."
+    },
+    {
+      "name": "celesta.h2.inMemory",
+      "type": "java.lang.Boolean",
+      "sourceType": "ru.curs.celesta.spring.boot.autoconfigure.CelestaProperties$H2Properties",
+      "description": "In memory H2 will be running, if this flag is true.",
+      "defaultValue": false
+    },
+    {
+      "name": "celesta.h2.referentialIntegrity",
+      "type": "java.lang.Boolean",
+      "sourceType": "ru.curs.celesta.spring.boot.autoconfigure.CelestaProperties$H2Properties",
+      "description": "ReferentialIntegrity flag.",
+      "defaultValue": false
+    },
+    {
+      "name": "celesta.h2.port",
+      "type": "java.lang.Integer",
+      "sourceType": "ru.curs.celesta.spring.boot.autoconfigure.CelestaProperties$H2Properties",
+      "description": "Enables H2 web console on specified port."
+    },
+    {
+      "name": "celesta.skipDbUpdate",
+      "type": "java.lang.Boolean",
+      "sourceType": "ru.curs.celesta.spring.boot.autoconfigure.CelestaProperties",
+      "description": "Skips db updating if enabled.",
+      "defaultValue": false
+    },
+    {
+      "name": "celesta.forceDbInitialize",
+      "type": "java.lang.Boolean",
+      "sourceType": "ru.curs.celesta.spring.boot.autoconfigure.CelestaProperties",
+      "description": "Force initializes db if enabled.",
+      "defaultValue": false
+    },
+    {
+      "name": "celesta.logLogins",
+      "type": "java.lang.Boolean",
+      "sourceType": "ru.curs.celesta.spring.boot.autoconfigure.CelestaProperties",
+      "description": "Logs all login and logout actions if specified.",
+      "defaultValue": false
+    },
+    {
+      "name": "celesta.celestaScan",
+      "type": "java.util.Set<java.lang.String>",
+      "sourceType": "ru.curs.celesta.spring.boot.autoconfigure.CelestaProperties",
+      "description": "Set of packages for scanning by annotation processor."
+    }
+  ]
+}
