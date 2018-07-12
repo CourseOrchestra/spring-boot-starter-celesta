@@ -22,7 +22,7 @@
       "type": "java.lang.String",
       "sourceType": "ru.curs.celesta.spring.boot.autoconfigure.CelestaProperties",
       "description": "The path to the score.",
-      "defaultValue": "src/main/resources/score"
+      "defaultValue": "/score"
     },
     {
       "name": "celesta.jdbc.url",
