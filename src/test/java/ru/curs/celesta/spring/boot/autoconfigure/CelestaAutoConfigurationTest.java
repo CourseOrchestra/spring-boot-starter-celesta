@@ -5,6 +5,7 @@ import org.springframework.boot.autoconfigure.AutoConfigurations;
 import org.springframework.boot.test.context.runner.ApplicationContextRunner;
 import ru.curs.celesta.java.Celesta;
 
+import java.io.File;
 import java.util.Properties;
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -12,7 +13,8 @@ import static org.junit.jupiter.api.Assertions.*;
 
 public class CelestaAutoConfigurationTest {
 
-    private static final String SCORE_PATH = "src/test/resources/score";
+    private static final String SCORE_PATH = "classpath:score";
+    private static final String EXPECTED_SCORE_PATH = new File("target/test-classes/score").getAbsolutePath();
 
     private final ApplicationContextRunner contextRunner = new ApplicationContextRunner()
             .withConfiguration(AutoConfigurations.of(CelestaAutoConfiguration.class))
@@ -35,7 +37,7 @@ public class CelestaAutoConfigurationTest {
                             () -> assertEquals(6, p.size()),
                             () -> assertEquals("true", p.getProperty("h2.in-memory")),
                             () -> assertEquals("false", p.getProperty("h2.referential.integrity")),
-                            () -> assertEquals(SCORE_PATH, p.getProperty("score.path")),
+                            () -> assertEquals(EXPECTED_SCORE_PATH, p.getProperty("score.path")),
                             () -> assertEquals("false", p.getProperty("skip.dbupdate")),
                             () -> assertEquals("false", p.getProperty("force.dbinitialize")),
                             () -> assertEquals("false", p.getProperty("log.logins"))
@@ -80,7 +82,7 @@ public class CelestaAutoConfigurationTest {
                             () -> assertEquals("false", p.getProperty("h2.in-memory")),
                             () -> assertEquals("true", p.getProperty("h2.referential.integrity")),
                             () -> assertEquals("1234", p.getProperty("h2.port")),
-                            () -> assertEquals(SCORE_PATH, p.getProperty("score.path")),
+                            () -> assertEquals(EXPECTED_SCORE_PATH, p.getProperty("score.path")),
                             () -> assertEquals("true", p.getProperty("skip.dbupdate")),
                             () -> assertEquals("true", p.getProperty("force.dbinitialize")),
                             () -> assertEquals("true", p.getProperty("log.logins")),

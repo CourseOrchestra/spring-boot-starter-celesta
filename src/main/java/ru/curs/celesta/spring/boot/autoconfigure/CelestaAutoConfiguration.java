@@ -1,12 +1,15 @@
 package ru.curs.celesta.spring.boot.autoconfigure;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.boot.context.properties.PropertyMapper;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.core.io.ResourceLoader;
 import ru.curs.celesta.java.Celesta;
 
+import java.io.IOException;
 import java.util.Properties;
 
 /**
@@ -18,16 +21,21 @@ import java.util.Properties;
 @EnableConfigurationProperties(CelestaProperties.class)
     public class CelestaAutoConfiguration {
 
+    @Autowired
+    private ResourceLoader resourceLoader;
+
     /**
      * @since  1.0.0
      *
      * Creates Celesta bean
      * @param celestaProperties configuration properties
      * @return Configured Celesta
+     *
+     * @throws IOException if score path is unavailable
      */
     @Bean
     @ConditionalOnMissingBean
-    public Celesta celesta(CelestaProperties celestaProperties) {
+    public Celesta celesta(CelestaProperties celestaProperties) throws IOException {
         CelestaProperties.JdbcProperties jdbc = celestaProperties.getJdbc();
         CelestaProperties.H2Properties h2 = celestaProperties.getH2();
 
@@ -35,7 +43,10 @@ import java.util.Properties;
 
         Properties properties = new Properties();
 
-        map.from(celestaProperties::getScorePath).to(x -> properties.put("score.path", String.valueOf(x)));
+        String absoluteScorePath = resourceLoader.getResource(celestaProperties.getScorePath())
+                .getFile().getAbsolutePath();
+
+        map.from(absoluteScorePath::toString).to(x -> properties.put("score.path", x));
 
         if (jdbc != null) {
             map.from(jdbc::getUrl)
