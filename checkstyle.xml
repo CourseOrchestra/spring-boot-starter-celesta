@@ -57,6 +57,7 @@
             <property name="scope" value="public"/>
             <property name="allowMissingReturnTag" value="true"/>
             <property name="tokens" value="METHOD_DEF"/>
+            <property name="allowMissingPropertyJavadoc" value="true" />
         </module>
         <module name="JavadocType">
             <property name="scope" value="public"/>
@@ -160,13 +161,15 @@
 
         <!-- Checks for class design                         -->
         <!-- See http://checkstyle.sf.net/config_design.html -->
-        <module name="DesignForExtension"/>
-        <module name="FinalClass"/>
-        <module name="HideUtilityClassConstructor"/>
-        <module name="InterfaceIsType"/>
-        <module name="VisibilityModifier"/>
+        <module name="DesignForExtension">
+            <!--<property name="ignoredAnnotations" value="org.springframework.context.annotation.Configuration"/>-->
+       </module>
+       <module name="FinalClass"/>
+       <module name="HideUtilityClassConstructor"/>
+       <module name="InterfaceIsType"/>
+       <module name="VisibilityModifier"/>
 
-        <!-- Miscellaneous other checks.                   -->
+       <!-- Miscellaneous other checks.                   -->
         <!-- See http://checkstyle.sf.net/config_misc.html -->
         <module name="ArrayTypeStyle"/>
         <!-- <module name="FinalParameters"/>-->

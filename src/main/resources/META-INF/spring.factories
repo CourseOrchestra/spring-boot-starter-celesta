@@ -1,0 +1,2 @@
+org.springframework.boot.autoconfigure.EnableAutoConfiguration=\
+ru.curs.celesta.spring.boot.autoconfigure.CelestaAutoConfiguration
