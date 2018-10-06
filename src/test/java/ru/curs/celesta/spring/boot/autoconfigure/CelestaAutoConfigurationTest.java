@@ -6,6 +6,7 @@ import org.springframework.boot.context.annotation.UserConfigurations;
 import org.springframework.boot.test.context.runner.ApplicationContextRunner;
 import ru.curs.celesta.CallContext;
 import ru.curs.celesta.Celesta;
+import ru.curs.celesta.transaction.DummyService;
 
 import java.io.File;
 import java.sql.SQLException;
@@ -94,29 +95,6 @@ public class CelestaAutoConfigurationTest {
                                         p.getProperty("celestaScan")
                                 )
                         );
-
-                        shutDownH2(celesta);
-                    }
-                }));
-    }
-
-    @Test
-    void celestaTransactionAspectActivatesContext() {
-        this.contextRunner
-                .withConfiguration(UserConfigurations.of(DummyService.class))
-                .withPropertyValues("celesta.h2.inMemory:true")
-                .run((context -> {
-                    try (Celesta celesta = context.getBean(Celesta.class)) {
-                        DummyService srv = context.getBean(DummyService.class);
-                        CallContext cc = new CallContext("foo");
-                        assertFalse(cc.isClosed());
-                        assertNull(cc.getCelesta());
-
-                        srv.greet(cc, "bar");
-
-                        assertNotNull(cc.getCelesta());
-                        assertSame(celesta, cc.getCelesta());
-                        assertTrue(cc.isClosed());
 
                         shutDownH2(celesta);
                     }

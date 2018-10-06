@@ -10,7 +10,7 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.EnableAspectJAutoProxy;
 import org.springframework.core.io.ResourceLoader;
 import ru.curs.celesta.Celesta;
-import ru.curs.celesta.CelestaTransactionAspect;
+import ru.curs.celesta.transaction.CelestaTransactionAspect;
 
 import java.io.IOException;
 import java.util.Properties;
