@@ -17,7 +17,6 @@ public class CelestaProperties {
     private H2Properties h2;
     private boolean skipDbUpdate = false;
     private boolean forceDbInitialize = false;
-    private boolean logLogins = false;
     private LinkedHashSet<String> celestaScan;
 
     public final String getScorePath() {
@@ -58,14 +57,6 @@ public class CelestaProperties {
 
     public final void setForceDbInitialize(boolean forceDbInitialize) {
         this.forceDbInitialize = forceDbInitialize;
-    }
-
-    public final boolean isLogLogins() {
-        return logLogins;
-    }
-
-    public final void setLogLogins(boolean logLogins) {
-        this.logLogins = logLogins;
     }
 
     public final LinkedHashSet<String> getCelestaScan() {

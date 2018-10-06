@@ -1,13 +1,16 @@
 package ru.curs.celesta.spring.boot.autoconfigure;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.autoconfigure.condition.ConditionalOnBean;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.boot.context.properties.PropertyMapper;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.context.annotation.EnableAspectJAutoProxy;
 import org.springframework.core.io.ResourceLoader;
-import ru.curs.celesta.java.Celesta;
+import ru.curs.celesta.Celesta;
+import ru.curs.celesta.transaction.CelestaTransactionAspect;
 
 import java.io.IOException;
 import java.util.Properties;
@@ -19,19 +22,19 @@ import java.util.Properties;
  */
 @Configuration
 @EnableConfigurationProperties(CelestaProperties.class)
-    public class CelestaAutoConfiguration {
+@EnableAspectJAutoProxy
+public class CelestaAutoConfiguration {
 
     @Autowired
     private ResourceLoader resourceLoader;
 
     /**
-     * @since  1.0.0
-     *
-     * Creates Celesta bean
      * @param celestaProperties configuration properties
      * @return Configured Celesta
-     *
      * @throws IOException if score path is unavailable
+     * @since 1.0.0
+     * <p>
+     * Creates Celesta bean
      */
     @Bean
     @ConditionalOnMissingBean
@@ -71,10 +74,20 @@ import java.util.Properties;
                 .to(x -> properties.put("skip.dbupdate", String.valueOf(x)));
         map.from(celestaProperties::isForceDbInitialize)
                 .to(x -> properties.put("force.dbinitialize", String.valueOf(x)));
-        map.from(celestaProperties::isLogLogins)
-                .to(x -> properties.put("log.logins", String.valueOf(x)));
 
         return Celesta.createInstance(properties);
+    }
+
+    /**
+     * Provides an aspect for wrapping Celesta-transactional methods.
+     *
+     * @param celesta Configured Celesta.
+     * @return Aspect for wrapping Celesta-transactional methods.
+     */
+    @Bean
+    @ConditionalOnBean(Celesta.class)
+    public CelestaTransactionAspect celestaTransactionAspect(Celesta celesta) {
+        return new CelestaTransactionAspect(celesta);
     }
 
 }
