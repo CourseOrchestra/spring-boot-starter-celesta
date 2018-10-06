@@ -3,7 +3,6 @@ package ru.curs.celesta.transaction;
 import org.aspectj.lang.ProceedingJoinPoint;
 import org.aspectj.lang.annotation.Around;
 import org.aspectj.lang.annotation.Aspect;
-import org.springframework.stereotype.Component;
 import ru.curs.celesta.CallContext;
 import ru.curs.celesta.Celesta;
 
@@ -11,7 +10,6 @@ import ru.curs.celesta.Celesta;
  * Aspect for CelestaTransaction annotated methods.
  */
 @Aspect
-@Component
 public final class CelestaTransactionAspect {
     private final Celesta celesta;
 

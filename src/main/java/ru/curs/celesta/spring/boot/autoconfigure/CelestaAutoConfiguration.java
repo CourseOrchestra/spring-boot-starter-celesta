@@ -1,11 +1,11 @@
 package ru.curs.celesta.spring.boot.autoconfigure;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.autoconfigure.condition.ConditionalOnBean;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.boot.context.properties.PropertyMapper;
 import org.springframework.context.annotation.Bean;
-import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.EnableAspectJAutoProxy;
 import org.springframework.core.io.ResourceLoader;
@@ -23,7 +23,6 @@ import java.util.Properties;
 @Configuration
 @EnableConfigurationProperties(CelestaProperties.class)
 @EnableAspectJAutoProxy
-@ComponentScan(basePackageClasses = {CelestaTransactionAspect.class})
 public class CelestaAutoConfiguration {
 
     @Autowired
@@ -77,6 +76,12 @@ public class CelestaAutoConfiguration {
                 .to(x -> properties.put("force.dbinitialize", String.valueOf(x)));
 
         return Celesta.createInstance(properties);
+    }
+
+    @Bean
+    @ConditionalOnBean(Celesta.class)
+    public CelestaTransactionAspect celestaTransactionAspect(Celesta celesta) {
+        return new CelestaTransactionAspect(celesta);
     }
 
 }
