@@ -78,6 +78,12 @@ public class CelestaAutoConfiguration {
         return Celesta.createInstance(properties);
     }
 
+    /**
+     * Provides an aspect for wrapping Celesta-transactional methods.
+     *
+     * @param celesta Configured Celesta.
+     * @return Aspect for wrapping Celesta-transactional methods.
+     */
     @Bean
     @ConditionalOnBean(Celesta.class)
     public CelestaTransactionAspect celestaTransactionAspect(Celesta celesta) {
