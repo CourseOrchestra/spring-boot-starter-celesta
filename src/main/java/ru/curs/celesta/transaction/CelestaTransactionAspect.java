@@ -32,7 +32,7 @@ public final class CelestaTransactionAspect {
         Optional<CallContext> cc =
                 Arrays.stream(joinPoint.getArgs())
                         .filter(arg -> arg instanceof CallContext)
-                        .map(arg -> (CallContext)arg)
+                        .map(arg -> (CallContext) arg)
                         .findFirst();
         cc.ifPresent(c -> c.activate(celesta, joinPoint.getSignature().toShortString()));
         try {
