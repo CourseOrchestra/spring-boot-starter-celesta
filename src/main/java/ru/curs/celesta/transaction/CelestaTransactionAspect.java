@@ -6,6 +6,9 @@ import org.aspectj.lang.annotation.Aspect;
 import ru.curs.celesta.CallContext;
 import ru.curs.celesta.Celesta;
 
+import java.util.Arrays;
+import java.util.Optional;
+
 /**
  * Aspect for CelestaTransaction annotated methods.
  */
@@ -26,29 +29,21 @@ public final class CelestaTransactionAspect {
      */
     @Around(value = "@annotation(CelestaTransaction)")
     public Object execEntryPoint(ProceedingJoinPoint joinPoint) throws Throwable {
-        CallContext cc = null;
+        Optional<CallContext> cc =
+                Arrays.stream(joinPoint.getArgs())
+                        .filter(arg -> arg instanceof CallContext)
+                        .map(arg -> (CallContext)arg)
+                        .findFirst();
+        cc.ifPresent(c -> c.activate(celesta, joinPoint.getSignature().toShortString()));
         try {
-            for (Object arg : joinPoint.getArgs()) {
-                if (arg instanceof CallContext) {
-                    cc = (CallContext) arg;
-                    cc.activate(celesta, joinPoint.getSignature().toShortString());
-                    break;
-                }
-            }
             Object result = joinPoint.proceed();
-            if (cc != null) {
-                cc.commit();
-            }
+            cc.ifPresent(CallContext::commit);
             return result;
         } catch (Throwable e) {
-            if (cc != null) {
-                cc.rollback();
-            }
+            cc.ifPresent(CallContext::rollback);
             throw e;
         } finally {
-            if (cc != null) {
-                cc.close();
-            }
+            cc.ifPresent(CallContext::close);
         }
     }
 }
