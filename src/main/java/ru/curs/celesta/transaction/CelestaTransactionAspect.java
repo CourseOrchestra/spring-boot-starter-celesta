@@ -34,16 +34,23 @@ public final class CelestaTransactionAspect {
                         .filter(arg -> arg instanceof CallContext)
                         .map(arg -> (CallContext) arg)
                         .findFirst();
-        cc.ifPresent(c -> c.activate(celesta, joinPoint.getSignature().toShortString()));
+        if (cc.isPresent()){
+            return proceedInTransaction(cc.get(), joinPoint);
+        } else
+            return joinPoint.proceed();
+    }
+
+    private Object proceedInTransaction(CallContext c, ProceedingJoinPoint joinPoint) throws Throwable {
         try {
+            c.activate(celesta, joinPoint.getSignature().toShortString());
             Object result = joinPoint.proceed();
-            cc.ifPresent(CallContext::commit);
+            c.commit();
             return result;
         } catch (Throwable e) {
-            cc.ifPresent(CallContext::rollback);
+            c.rollback();
             throw e;
         } finally {
-            cc.ifPresent(CallContext::close);
+            c.close();
         }
     }
 }

@@ -9,6 +9,7 @@ import org.springframework.boot.test.context.runner.ApplicationContextRunner;
 import ru.curs.celesta.CallContext;
 import ru.curs.celesta.Celesta;
 import ru.curs.celesta.SystemCallContext;
+import ru.curs.celesta.dbutils.IProfiler;
 import ru.curs.celesta.spring.boot.autoconfigure.CelestaAutoConfiguration;
 
 import java.sql.SQLException;
@@ -121,6 +122,7 @@ public class CelestaTransactionTest {
     void handlesCallContextActivationFailure() {
         Celesta celesta = mock(Celesta.class);
         when(celesta.getConnectionPool()).thenThrow(new IllegalStateException("no connections"));
+        when(celesta.getProfiler()).thenReturn(mock(IProfiler.class));
         CallContext ctx = new SystemCallContext();
 
         ProceedingJoinPoint jp = mock(ProceedingJoinPoint.class);
@@ -130,9 +132,11 @@ public class CelestaTransactionTest {
         when(jp.getSignature()).thenReturn(signature);
 
         CelestaTransactionAspect aspect = new CelestaTransactionAspect(celesta);
+        assertFalse(ctx.isClosed());
         assertEquals("no connections",
                 assertThrows(IllegalStateException.class,
                         () -> aspect.execEntryPoint(jp)).getMessage());
+        assertTrue(ctx.isClosed());
     }
 
 }
