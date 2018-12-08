@@ -34,10 +34,11 @@ public final class CelestaTransactionAspect {
                         .filter(arg -> arg instanceof CallContext)
                         .map(arg -> (CallContext) arg)
                         .findFirst();
-        if (cc.isPresent()){
+        if (cc.isPresent()) {
             return proceedInTransaction(cc.get(), joinPoint);
-        } else
+        } else {
             return joinPoint.proceed();
+        }
     }
 
     private Object proceedInTransaction(CallContext c, ProceedingJoinPoint joinPoint) throws Throwable {
