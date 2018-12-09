@@ -31,8 +31,8 @@ public final class CelestaTransactionAspect {
     public Object execEntryPoint(ProceedingJoinPoint joinPoint) throws Throwable {
         Optional<CallContext> cc =
                 Arrays.stream(joinPoint.getArgs())
-                        .filter(arg -> arg instanceof CallContext)
-                        .map(arg -> (CallContext) arg)
+                        .filter(CallContext.class::isInstance)
+                        .map(CallContext.class::cast)
                         .findFirst();
         if (cc.isPresent()) {
             return proceedInTransaction(cc.get(), joinPoint);
