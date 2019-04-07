@@ -4,7 +4,7 @@ import org.aspectj.lang.ProceedingJoinPoint;
 import org.aspectj.lang.annotation.Around;
 import org.aspectj.lang.annotation.Aspect;
 import ru.curs.celesta.CallContext;
-import ru.curs.celesta.Celesta;
+import ru.curs.celesta.ICelesta;
 
 import java.util.Arrays;
 import java.util.Optional;
@@ -14,9 +14,10 @@ import java.util.Optional;
  */
 @Aspect
 public final class CelestaTransactionAspect {
-    private final Celesta celesta;
 
-    public CelestaTransactionAspect(Celesta celesta) {
+    private final ICelesta celesta;
+
+    public CelestaTransactionAspect(ICelesta celesta) {
         this.celesta = celesta;
     }
 
@@ -54,4 +55,5 @@ public final class CelestaTransactionAspect {
             c.close();
         }
     }
+
 }

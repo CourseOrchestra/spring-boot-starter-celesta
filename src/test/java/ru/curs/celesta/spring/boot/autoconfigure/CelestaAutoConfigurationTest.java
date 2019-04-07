@@ -2,12 +2,8 @@ package ru.curs.celesta.spring.boot.autoconfigure;
 
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.autoconfigure.AutoConfigurations;
-import org.springframework.boot.context.annotation.UserConfigurations;
 import org.springframework.boot.test.context.runner.ApplicationContextRunner;
-import ru.curs.celesta.CallContext;
 import ru.curs.celesta.Celesta;
-import ru.curs.celesta.transaction.DummyService;
-
 import java.io.File;
 import java.sql.SQLException;
 import java.util.Properties;
@@ -17,12 +13,8 @@ import static org.junit.jupiter.api.Assertions.*;
 
 public class CelestaAutoConfigurationTest {
 
-    private static final String SCORE_PATH = "classpath:score";
-    private static final String EXPECTED_SCORE_PATH = new File("target/test-classes/score").getAbsolutePath();
-
     private final ApplicationContextRunner contextRunner = new ApplicationContextRunner()
-            .withConfiguration(AutoConfigurations.of(CelestaAutoConfiguration.class))
-            .withPropertyValues("celesta.scorePath:" + SCORE_PATH);
+            .withConfiguration(AutoConfigurations.of(CelestaAutoConfiguration.class));
 
     @Test
     void testBeanRegistration() {
@@ -37,10 +29,9 @@ public class CelestaAutoConfigurationTest {
                         Properties p = celesta.getSetupProperties();
 
                         assertAll(
-                                () -> assertEquals(5, p.size()),
+                                () -> assertEquals(4, p.size()),
                                 () -> assertEquals("true", p.getProperty("h2.in-memory")),
                                 () -> assertEquals("false", p.getProperty("h2.referential.integrity")),
-                                () -> assertEquals(EXPECTED_SCORE_PATH, p.getProperty("score.path")),
                                 () -> assertEquals("false", p.getProperty("skip.dbupdate")),
                                 () -> assertEquals("false", p.getProperty("force.dbinitialize"))
                         );
@@ -77,7 +68,7 @@ public class CelestaAutoConfigurationTest {
                         Properties p = celesta.getSetupProperties();
 
                         assertAll(
-                                () -> assertEquals(10, p.size()),
+                                () -> assertEquals(9, p.size()),
                                 () -> assertEquals(
                                         "jdbc:h2:mem:celesta;DB_CLOSE_DELAY=-1",
                                         p.getProperty("rdbms.connection.url")
@@ -87,7 +78,6 @@ public class CelestaAutoConfigurationTest {
                                 () -> assertEquals("false", p.getProperty("h2.in-memory")),
                                 () -> assertEquals("true", p.getProperty("h2.referential.integrity")),
                                 () -> assertEquals("1234", p.getProperty("h2.port")),
-                                () -> assertEquals(EXPECTED_SCORE_PATH, p.getProperty("score.path")),
                                 () -> assertEquals("true", p.getProperty("skip.dbupdate")),
                                 () -> assertEquals("true", p.getProperty("force.dbinitialize")),
                                 () -> assertEquals(
@@ -96,6 +86,31 @@ public class CelestaAutoConfigurationTest {
                                 )
                         );
 
+                        shutDownH2(celesta);
+                    }
+                }));
+    }
+
+    @Test
+    void testBeanRegistrationWithScorePath() {
+
+        final String scorePath = "classpath:testScore";
+        final String expectedScorePath = new File("target/test-classes/testScore").getAbsolutePath();
+
+        this.contextRunner
+                .withPropertyValues("celesta.h2.inMemory:true")
+                .withPropertyValues("celesta.scorePath:" + scorePath)
+                .run((context -> {
+                    try (Celesta celesta = context.getBean(Celesta.class)) {
+                        //Celesta bean is registered
+                        assertNotNull(context.getBean(Celesta.class));
+
+                        //Properties mapped correctly
+                        Properties p = celesta.getSetupProperties();
+
+                        assertAll(
+                                () -> assertEquals(expectedScorePath, p.getProperty("score.path"))
+                        );
                         shutDownH2(celesta);
                     }
                 }));

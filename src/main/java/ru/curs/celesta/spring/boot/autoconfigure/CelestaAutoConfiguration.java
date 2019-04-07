@@ -8,12 +8,21 @@ import org.springframework.boot.context.properties.PropertyMapper;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.EnableAspectJAutoProxy;
+import org.springframework.core.io.Resource;
 import org.springframework.core.io.ResourceLoader;
+import org.springframework.core.io.support.PathMatchingResourcePatternResolver;
+
 import ru.curs.celesta.Celesta;
 import ru.curs.celesta.transaction.CelestaTransactionAspect;
 
+import java.io.File;
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
+import java.util.Objects;
 import java.util.Properties;
+import java.util.stream.Collectors;
 
 /**
  * {@link org.springframework.boot.autoconfigure.EnableAutoConfiguration Auto-configuration} for Celesta support.
@@ -46,10 +55,10 @@ public class CelestaAutoConfiguration {
 
         Properties properties = new Properties();
 
-        String absoluteScorePath = resourceLoader.getResource(celestaProperties.getScorePath())
-                .getFile().getAbsolutePath();
-
-        map.from(absoluteScorePath::toString).to(x -> properties.put("score.path", x));
+        String scorePath = chooseScorePath(celestaProperties.getScorePath());
+        if (scorePath != null) {
+            map.from(scorePath::toString).to(x -> properties.put("score.path", x));
+        }
 
         if (jdbc != null) {
             map.from(jdbc::getUrl)
@@ -76,6 +85,38 @@ public class CelestaAutoConfiguration {
                 .to(x -> properties.put("force.dbinitialize", String.valueOf(x)));
 
         return Celesta.createInstance(properties);
+    }
+
+    private String chooseScorePath(String celestaScorePath) throws IOException {
+        if (celestaScorePath == null) {
+            return null;
+        }
+
+        List<String> scorePaths = new ArrayList<>();
+
+        for (String cs : celestaScorePath.split(",")) {
+            Resource[] scoreResources = new PathMatchingResourcePatternResolver(resourceLoader)
+                    .getResources(cs.trim());
+            Arrays.stream(scoreResources)
+                .map(this::getFileFromResource)
+                .filter(Objects::nonNull)
+                .map(File::getAbsolutePath)
+                .forEach(scorePaths::add);
+        }
+
+        return scorePaths.stream().collect(Collectors.joining(File.pathSeparator));
+    }
+
+    private File getFileFromResource(Resource resource) {
+        if (!resource.isFile()) {
+            return null;
+        }
+
+        try {
+            return resource.getFile();
+        } catch (IOException ex) {
+            throw new RuntimeException(ex); // This should never happen though
+        }
     }
 
     /**

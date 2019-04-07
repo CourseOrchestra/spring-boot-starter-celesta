@@ -12,7 +12,7 @@ import java.util.LinkedHashSet;
 @ConfigurationProperties(prefix = "celesta")
 public class CelestaProperties {
 
-    private String scorePath = "classpath:score";
+    private String scorePath;
     private JdbcProperties jdbc;
     private H2Properties h2;
     private boolean skipDbUpdate = false;
