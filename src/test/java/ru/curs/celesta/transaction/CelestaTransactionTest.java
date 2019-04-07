@@ -8,6 +8,7 @@ import org.springframework.boot.context.annotation.UserConfigurations;
 import org.springframework.boot.test.context.runner.ApplicationContextRunner;
 import ru.curs.celesta.CallContext;
 import ru.curs.celesta.Celesta;
+import ru.curs.celesta.ICelesta;
 import ru.curs.celesta.SystemCallContext;
 import ru.curs.celesta.dbutils.IProfiler;
 import ru.curs.celesta.spring.boot.autoconfigure.CelestaAutoConfiguration;
@@ -25,12 +26,9 @@ import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
 public class CelestaTransactionTest {
-    private static final String SCORE_PATH = "classpath:score";
 
     private final ApplicationContextRunner contextRunner = new ApplicationContextRunner()
-            .withConfiguration(AutoConfigurations.of(CelestaAutoConfiguration.class))
-            .withPropertyValues("celesta.scorePath:" + SCORE_PATH);
-
+            .withConfiguration(AutoConfigurations.of(CelestaAutoConfiguration.class));
 
     @Test
     void activatesContext() {
@@ -120,7 +118,7 @@ public class CelestaTransactionTest {
 
     @Test
     void handlesCallContextActivationFailure() {
-        Celesta celesta = mock(Celesta.class);
+        ICelesta celesta = mock(ICelesta.class);
         when(celesta.getConnectionPool()).thenThrow(new IllegalStateException("no connections"));
         when(celesta.getProfiler()).thenReturn(mock(IProfiler.class));
         CallContext ctx = new SystemCallContext();
