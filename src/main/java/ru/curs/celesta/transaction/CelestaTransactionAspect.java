@@ -43,6 +43,12 @@ public final class CelestaTransactionAspect {
     }
 
     private Object proceedInTransaction(CallContext c, ProceedingJoinPoint joinPoint) throws Throwable {
+
+        /* Skip CallContext activation in case it is already active. Non-zero DBPID
+           is not a perfect way to distinguish active CallContexts (e. g. a closed
+           CallContext will also have a cached non-zero DBPID), but  since we
+           do not have public 'isActive' property on CallContext, it's just
+           a working solution. */
         if (c.getDBPid() != 0) {
             return joinPoint.proceed();
         }
