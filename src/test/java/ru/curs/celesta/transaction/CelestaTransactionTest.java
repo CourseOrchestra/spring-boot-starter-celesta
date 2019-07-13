@@ -137,4 +137,22 @@ public class CelestaTransactionTest {
         assertTrue(ctx.isClosed());
     }
 
+    @Test
+    void testNestedProxiedCall() {
+        this.contextRunner
+                .withConfiguration(UserConfigurations.of(DummyService.class))
+                .withPropertyValues("celesta.h2.inMemory:true")
+                .run((context -> {
+                    try (Celesta celesta = context.getBean(Celesta.class)) {
+                        DummyService srv = context.getBean(DummyService.class);
+                        CallContext cc = new CallContext("foo");
+
+                        srv.callProxiedLevel0(cc);
+
+                        assertTrue(cc.isClosed());
+                        shutDownH2(celesta);
+                    }
+                }));
+    }
+
 }

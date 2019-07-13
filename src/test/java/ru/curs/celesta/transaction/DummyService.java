@@ -1,5 +1,6 @@
 package ru.curs.celesta.transaction;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import ru.curs.celesta.CallContext;
 import ru.curs.celesta.DBType;
@@ -12,6 +13,9 @@ import static org.junit.jupiter.api.Assertions.*;
 public class DummyService {
 
     public static final String ERROR_MESSAGE = "error message";
+
+    @Autowired
+    private DummyService self;
 
     @CelestaTransaction
     public void withContext(CallContext cc, String name) throws InterruptedException {
@@ -37,4 +41,15 @@ public class DummyService {
     public void exception(CallContext cc) throws SQLException {
         throw new SQLException(ERROR_MESSAGE);
     }
+
+    @CelestaTransaction
+    public void callProxiedLevel0(CallContext cc) {
+        self.callProxiedLevel1(cc);
+    }
+
+    @CelestaTransaction
+    public void callProxiedLevel1(CallContext cc) {
+        // do nothing
+    }
+
 }
