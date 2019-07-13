@@ -43,6 +43,10 @@ public final class CelestaTransactionAspect {
     }
 
     private Object proceedInTransaction(CallContext c, ProceedingJoinPoint joinPoint) throws Throwable {
+        if (c.getDBPid() != 0) {
+            return joinPoint.proceed();
+        }
+
         try {
             c.activate(celesta, joinPoint.getSignature().toShortString());
             Object result = joinPoint.proceed();
