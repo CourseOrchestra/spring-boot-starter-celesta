@@ -43,7 +43,6 @@
         <!--dependency versions -->
         <celesta.version>7.1.1</celesta.version>
         <checkstyle.version>8.26</checkstyle.version>
-        <junit.platform.version>1.0.0</junit.platform.version>
         <junit.version>5.1.0</junit.version>
         <spring.boot.version>2.2.1.RELEASE</spring.boot.version>
 
@@ -55,7 +54,7 @@
         <maven.javadoc.plugin.version>3.1.1</maven.javadoc.plugin.version>
         <maven.site.plugin.version>3.7.1</maven.site.plugin.version>
         <maven.source.plugin.version>3.2.0</maven.source.plugin.version>
-        <maven.surefire.plugin.version>2.19.1</maven.surefire.plugin.version>
+        <maven.surefire.plugin.version>2.22.2</maven.surefire.plugin.version>
     </properties>
 
     <dependencyManagement>
@@ -190,18 +189,6 @@
                     <groupId>org.apache.maven.plugins</groupId>
                     <artifactId>maven-surefire-plugin</artifactId>
                     <version>${maven.surefire.plugin.version}</version>
-                    <dependencies>
-                        <dependency>
-                            <groupId>org.junit.platform</groupId>
-                            <artifactId>junit-platform-surefire-provider</artifactId>
-                            <version>${junit.platform.version}</version>
-                        </dependency>
-                        <dependency>
-                            <groupId>org.junit.jupiter</groupId>
-                            <artifactId>junit-jupiter-engine</artifactId>
-                            <version>${junit.version}</version>
-                        </dependency>
-                    </dependencies>
                 </plugin>
             </plugins>
         </pluginManagement>
