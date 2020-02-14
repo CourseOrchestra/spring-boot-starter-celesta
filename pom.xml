@@ -35,6 +35,10 @@
             <name>Ivan Golovko</name>
             <email>ioanngolovko@gmail.com</email>
         </developer>
+        <developer>
+            <name>Ivan Ponomarev</name>
+            <email>iponomarev@mail.ru</email>
+        </developer>
     </developers>
 
     <properties>
@@ -43,7 +47,7 @@
         <!--dependency versions -->
         <celesta.version>7.2.8</celesta.version>
         <checkstyle.version>8.29</checkstyle.version>
-        <junit.version>5.1.0</junit.version>
+        <junit.version>5.6.0</junit.version>
         <spring.boot.version>2.2.4.RELEASE</spring.boot.version>
 
         <!--plugin versions -->
@@ -104,23 +108,7 @@
         </dependency>
         <dependency>
             <groupId>org.junit.jupiter</groupId>
-            <artifactId>junit-jupiter-api</artifactId>
-            <scope>test</scope>
-        </dependency>
-        <dependency>
-            <groupId>org.junit.jupiter</groupId>
-            <artifactId>junit-jupiter-engine</artifactId>
-            <scope>test</scope>
-        </dependency>
-        <dependency>
-            <groupId>org.junit.platform</groupId>
-            <artifactId>junit-platform-launcher</artifactId>
-            <scope>test</scope>
-        </dependency>
-        <dependency>
-            <groupId>org.junit.platform</groupId>
-            <artifactId>junit-platform-runner</artifactId>
-            <scope>test</scope>
+            <artifactId>junit-jupiter</artifactId>
         </dependency>
         <dependency>
             <groupId>com.h2database</groupId>
