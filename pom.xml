@@ -47,7 +47,6 @@
         <!--dependency versions -->
         <celesta.version>7.2.8</celesta.version>
         <checkstyle.version>8.29</checkstyle.version>
-        <junit.version>5.6.0</junit.version>
         <spring.boot.version>2.2.4.RELEASE</spring.boot.version>
 
         <!--plugin versions -->
