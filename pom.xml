@@ -47,7 +47,7 @@
         <!--dependency versions -->
         <celesta.version>7.3.30</celesta.version>
         <checkstyle.version>8.39</checkstyle.version>
-        <spring.boot.version>2.4.1</spring.boot.version>
+        <spring.boot.version>2.4.2</spring.boot.version>
 
         <!--plugin versions -->
         <spotbugs.maven.plugin.version>4.2.0</spotbugs.maven.plugin.version>
