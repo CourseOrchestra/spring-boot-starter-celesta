@@ -23,8 +23,8 @@ node {
         }
     } finally {
         junit '**/surefire-reports/**/*.xml'
-        checkstyle pattern: '**/target/checkstyle-result.xml'
-        findbugs pattern: '**/target/spotbugsXml.xml'
+        recordIssues tool: checkStyle(pattern: '**/target/checkstyle-result.xml')
+        recordIssues tool: spotBugs('**/target/spotbugsXml.xml')
     }
 
     if (env.BRANCH_NAME == 'dev') {
