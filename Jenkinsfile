@@ -24,7 +24,7 @@ node {
     } finally {
         junit '**/surefire-reports/**/*.xml'
         recordIssues tool: checkStyle(pattern: '**/target/checkstyle-result.xml')
-        recordIssues tool: spotBugs('**/target/spotbugsXml.xml')
+        recordIssues tool: spotBugs(pattern: '**/target/spotbugsXml.xml')
     }
 
     if (env.BRANCH_NAME == 'dev') {
