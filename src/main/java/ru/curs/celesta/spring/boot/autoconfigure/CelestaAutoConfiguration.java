@@ -30,7 +30,6 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.Objects;
 import java.util.Properties;
-import java.util.stream.Collectors;
 
 /**
  * {@link org.springframework.boot.autoconfigure.EnableAutoConfiguration Auto-configuration} for Celesta support.
@@ -45,6 +44,12 @@ public class CelestaAutoConfiguration {
     @Autowired
     private ResourceLoader resourceLoader;
 
+    /**
+     *
+     * @param celestaProperties Configuration properties
+     * @param dataSourceObjectProvider Provider for {@link DataSource}
+     * @return Configured connection pool for Celesta
+     */
     @Bean
     ConnectionPool connectionPool(CelestaProperties celestaProperties,
                                   ObjectProvider<DataSource> dataSourceObjectProvider) {
@@ -70,6 +75,7 @@ public class CelestaAutoConfiguration {
 
     /**
      * @param celestaProperties configuration properties
+     * @param connectionPool connection pool
      * @return Configured Celesta
      * @throws IOException if score path is unavailable
      * @since 1.0.0
