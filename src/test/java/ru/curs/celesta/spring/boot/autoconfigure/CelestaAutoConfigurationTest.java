@@ -1,9 +1,13 @@
 package ru.curs.celesta.spring.boot.autoconfigure;
 
+import org.h2.jdbcx.JdbcConnectionPool;
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.autoconfigure.AutoConfigurations;
 import org.springframework.boot.test.context.runner.ApplicationContextRunner;
 import ru.curs.celesta.Celesta;
+import ru.curs.celesta.DatasourceConnectionPool;
+
+import javax.sql.DataSource;
 import java.io.File;
 import java.sql.SQLException;
 import java.util.Properties;
@@ -116,4 +120,22 @@ public class CelestaAutoConfigurationTest {
                 }));
     }
 
+
+    @Test
+    void testRegistrationWithExternalConnectionPool() {
+        final String scorePath = "classpath:testScore";
+        final DataSource dataSource = JdbcConnectionPool.create("jdbc:h2:mem:database;DB_CLOSE_DELAY=-1", "", "");
+        this.contextRunner
+                .withBean(DataSource.class, () -> dataSource)
+                .withPropertyValues("celesta.jdbc.url:jdbc:h2")
+                .withPropertyValues("celesta.scorePath:" + scorePath)
+                .run((context -> {
+                    try (Celesta celesta = context.getBean(Celesta.class)) {
+                        //Celesta bean is registered
+                        assertNotNull(context.getBean(Celesta.class));
+                        assertTrue(celesta.getConnectionPool() instanceof DatasourceConnectionPool);
+                        shutDownH2(celesta);
+                    }
+                }));
+    }
 }

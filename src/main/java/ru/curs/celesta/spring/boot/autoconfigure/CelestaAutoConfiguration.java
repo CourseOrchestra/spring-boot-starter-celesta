@@ -1,5 +1,6 @@
 package ru.curs.celesta.spring.boot.autoconfigure;
 
+import org.springframework.beans.factory.ObjectProvider;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnBean;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
@@ -12,9 +13,16 @@ import org.springframework.core.io.Resource;
 import org.springframework.core.io.ResourceLoader;
 import org.springframework.core.io.support.PathMatchingResourcePatternResolver;
 
+import ru.curs.celesta.BaseAppSettings;
 import ru.curs.celesta.Celesta;
+import ru.curs.celesta.ConnectionPool;
+import ru.curs.celesta.ConnectionPoolConfiguration;
+import ru.curs.celesta.DBType;
+import ru.curs.celesta.DatasourceConnectionPool;
+import ru.curs.celesta.InternalConnectionPool;
 import ru.curs.celesta.transaction.CelestaTransactionAspect;
 
+import javax.sql.DataSource;
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
@@ -22,7 +30,6 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.Objects;
 import java.util.Properties;
-import java.util.stream.Collectors;
 
 /**
  * {@link org.springframework.boot.autoconfigure.EnableAutoConfiguration Auto-configuration} for Celesta support.
@@ -38,7 +45,37 @@ public class CelestaAutoConfiguration {
     private ResourceLoader resourceLoader;
 
     /**
+     *
+     * @param celestaProperties Configuration properties
+     * @param dataSourceObjectProvider Provider for {@link DataSource}
+     * @return Configured connection pool for Celesta
+     */
+    @Bean
+    ConnectionPool connectionPool(CelestaProperties celestaProperties,
+                                  ObjectProvider<DataSource> dataSourceObjectProvider) {
+        DataSource dataSource = dataSourceObjectProvider.getIfUnique();
+        if (dataSource == null) {
+            ConnectionPoolConfiguration cpc = new ConnectionPoolConfiguration();
+            CelestaProperties.JdbcProperties jdbc = celestaProperties.getJdbc();
+            if (jdbc == null) {
+                cpc.setJdbcConnectionUrl(BaseAppSettings.H2_IN_MEMORY_URL);
+                cpc.setLogin("");
+                cpc.setPassword("");
+            } else {
+                cpc.setJdbcConnectionUrl(jdbc.getUrl());
+                cpc.setLogin(jdbc.getUsername());
+                cpc.setPassword(jdbc.getPassword());
+            }
+            cpc.setDriverClassName(DBType.resolveByJdbcUrl(cpc.getJdbcConnectionUrl()).getDriverClassName());
+            return InternalConnectionPool.create(cpc);
+        } else {
+            return new DatasourceConnectionPool(dataSource);
+        }
+    }
+
+    /**
      * @param celestaProperties configuration properties
+     * @param connectionPool connection pool
      * @return Configured Celesta
      * @throws IOException if score path is unavailable
      * @since 1.0.0
@@ -47,7 +84,7 @@ public class CelestaAutoConfiguration {
      */
     @Bean
     @ConditionalOnMissingBean
-    public Celesta celesta(CelestaProperties celestaProperties) throws IOException {
+    public Celesta celesta(CelestaProperties celestaProperties, ConnectionPool connectionPool) throws IOException {
         CelestaProperties.JdbcProperties jdbc = celestaProperties.getJdbc();
         CelestaProperties.H2Properties h2 = celestaProperties.getH2();
 
@@ -84,7 +121,7 @@ public class CelestaAutoConfiguration {
         map.from(celestaProperties::isForceDbInitialize)
                 .to(x -> properties.put("force.dbinitialize", String.valueOf(x)));
 
-        return Celesta.createInstance(properties);
+        return Celesta.createInstance(properties, connectionPool);
     }
 
     private String chooseScorePath(String celestaScorePath) throws IOException {
@@ -98,13 +135,13 @@ public class CelestaAutoConfiguration {
             Resource[] scoreResources = new PathMatchingResourcePatternResolver(resourceLoader)
                     .getResources(cs.trim());
             Arrays.stream(scoreResources)
-                .map(this::getFileFromResource)
-                .filter(Objects::nonNull)
-                .map(File::getAbsolutePath)
-                .forEach(scorePaths::add);
+                    .map(this::getFileFromResource)
+                    .filter(Objects::nonNull)
+                    .map(File::getAbsolutePath)
+                    .forEach(scorePaths::add);
         }
 
-        return scorePaths.stream().collect(Collectors.joining(File.pathSeparator));
+        return String.join(File.pathSeparator, scorePaths);
     }
 
     private File getFileFromResource(Resource resource) {

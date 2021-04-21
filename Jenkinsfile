@@ -25,6 +25,14 @@ node {
         junit '**/surefire-reports/**/*.xml'
         recordIssues tool: checkStyle(pattern: '**/target/checkstyle-result.xml')
         recordIssues tool: spotBugs(pattern: '**/target/spotbugsXml.xml')
+		publishHTML (target: [
+          allowMissing: true,
+          alwaysLinkToLastBuild: true,
+          keepAll: true,
+          reportDir: 'target/site/jacoco',
+          reportFiles: 'index.html',
+          reportName: "JaCoCo report"
+       ])
     }
 
     if (env.BRANCH_NAME == 'dev') {
