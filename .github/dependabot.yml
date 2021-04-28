@@ -1,0 +1,41 @@
+version: 2
+updates:
+- package-ecosystem: maven
+  directory: "/"
+  schedule:
+    interval: daily
+    time: "02:00"
+  open-pull-requests-limit: 10
+  ignore:
+  - dependency-name: org.springframework.boot:spring-boot-starter-test
+    versions:
+    - 2.4.3
+    - 2.4.5
+  - dependency-name: org.springframework.boot:spring-boot-autoconfigure-processor
+    versions:
+    - 2.4.3
+    - 2.4.5
+  - dependency-name: org.springframework.boot:spring-boot-starter-aop
+    versions:
+    - 2.4.3
+    - 2.4.5
+  - dependency-name: org.springframework.boot:spring-boot-starter
+    versions:
+    - 2.4.3
+    - 2.4.5
+  - dependency-name: ru.curs:celesta-system-services
+    versions:
+    - 7.3.33
+    - 7.3.34
+    - 7.3.35
+    - 7.3.36
+    - 7.3.38
+    - 7.3.39
+  - dependency-name: ru.curs:celesta-parent
+    versions:
+    - 7.3.33
+    - 7.3.34
+    - 7.3.35
+    - 7.3.36
+    - 7.3.38
+    - 7.3.39
