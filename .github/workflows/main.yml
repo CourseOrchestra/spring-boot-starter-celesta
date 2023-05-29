@@ -20,7 +20,7 @@ jobs:
           cache: 'maven'
 
       - name: Build and test
-        run: clean verify -P dev
+        run: mvn clean verify -P dev
 
       - name: Publish test report
         uses: dorny/test-reporter@v1
