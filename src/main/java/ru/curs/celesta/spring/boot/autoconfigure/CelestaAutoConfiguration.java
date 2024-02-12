@@ -66,7 +66,6 @@ public class CelestaAutoConfiguration {
                 cpc.setLogin(jdbc.getUsername());
                 cpc.setPassword(jdbc.getPassword());
             }
-            cpc.setDriverClassName(DBType.resolveByJdbcUrl(cpc.getJdbcConnectionUrl()).getDriverClassName());
             return InternalConnectionPool.create(cpc);
         } else {
             return new DatasourceConnectionPool(dataSource);
