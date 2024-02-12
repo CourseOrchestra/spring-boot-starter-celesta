@@ -17,7 +17,6 @@ import ru.curs.celesta.BaseAppSettings;
 import ru.curs.celesta.Celesta;
 import ru.curs.celesta.ConnectionPool;
 import ru.curs.celesta.ConnectionPoolConfiguration;
-import ru.curs.celesta.DBType;
 import ru.curs.celesta.DatasourceConnectionPool;
 import ru.curs.celesta.InternalConnectionPool;
 import ru.curs.celesta.transaction.CelestaTransactionAspect;
@@ -66,7 +65,6 @@ public class CelestaAutoConfiguration {
                 cpc.setLogin(jdbc.getUsername());
                 cpc.setPassword(jdbc.getPassword());
             }
-            cpc.setDriverClassName(DBType.resolveByJdbcUrl(cpc.getJdbcConnectionUrl()).getDriverClassName());
             return InternalConnectionPool.create(cpc);
         } else {
             return new DatasourceConnectionPool(dataSource);
