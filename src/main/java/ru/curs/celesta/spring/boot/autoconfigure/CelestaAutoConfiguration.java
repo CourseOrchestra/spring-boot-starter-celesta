@@ -17,7 +17,6 @@ import ru.curs.celesta.BaseAppSettings;
 import ru.curs.celesta.Celesta;
 import ru.curs.celesta.ConnectionPool;
 import ru.curs.celesta.ConnectionPoolConfiguration;
-import ru.curs.celesta.DBType;
 import ru.curs.celesta.DatasourceConnectionPool;
 import ru.curs.celesta.InternalConnectionPool;
 import ru.curs.celesta.transaction.CelestaTransactionAspect;
