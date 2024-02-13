@@ -4,7 +4,7 @@
 
     <groupId>ru.curs</groupId>
     <artifactId>spring-boot-starter-celesta</artifactId>
-    <version>3.0.0</version>
+    <version>3.0.1-SNAPSHOT</version>
     <name>spring-boot-starter-celesta</name>
     <description>Celesta integration with Spring Boot</description>
     <packaging>jar</packaging>
