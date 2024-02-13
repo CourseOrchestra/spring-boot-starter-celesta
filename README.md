@@ -1,6 +1,6 @@
 # spring-boot-starter-celesta
 
-[![Build Status](https://ci.corchestra.ru/buildStatus/icon?job=spring-boot-starter-celesta/dev)](https://ci.corchestra.ru/job/spring-boot-starter-celesta/job/dev/)
+[![build](https://github.com/CourseOrchestra/spring-boot-starter-celesta/actions/workflows/main.yml/badge.svg)](https://github.com/CourseOrchestra/spring-boot-starter-celesta/actions/workflows/main.yml)
 [![Maven Central](https://maven-badges.herokuapp.com/maven-central/ru.curs/spring-boot-starter-celesta/badge.svg)](https://maven-badges.herokuapp.com/maven-central/ru.curs/spring-boot-starter-celesta)
 
 ## Configuration properties
