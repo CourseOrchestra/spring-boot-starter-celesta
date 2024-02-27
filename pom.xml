@@ -45,7 +45,7 @@
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 
         <!--dependency versions -->
-        <celesta.version>8.0.0</celesta.version>
+        <celesta.version>8.0.1</celesta.version>
         <checkstyle.version>10.13.0</checkstyle.version>
         <spring.boot.version>2.5.0</spring.boot.version>
 
