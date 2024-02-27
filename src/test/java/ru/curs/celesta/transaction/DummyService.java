@@ -1,6 +1,7 @@
 package ru.curs.celesta.transaction;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Lazy;
 import org.springframework.stereotype.Service;
 import ru.curs.celesta.CallContext;
 import ru.curs.celesta.DBType;
@@ -15,6 +16,7 @@ public class DummyService {
     public static final String ERROR_MESSAGE = "error message";
 
     @Autowired
+    @Lazy
     private DummyService self;
 
     @CelestaTransaction
