@@ -50,7 +50,7 @@
         <spring.boot.version>2.7.18</spring.boot.version>
 
         <!--plugin versions -->
-        <spotbugs.maven.plugin.version>4.8.6.6</spotbugs.maven.plugin.version>
+        <spotbugs.maven.plugin.version>4.9.1.0</spotbugs.maven.plugin.version>
         <maven.checkstyle.plugin.version>3.6.0</maven.checkstyle.plugin.version>
         <maven.compiler.plugin.version>3.13.0</maven.compiler.plugin.version>
         <maven.jar.plugin.version>3.4.2</maven.jar.plugin.version>
