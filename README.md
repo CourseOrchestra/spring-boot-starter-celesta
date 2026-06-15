@@ -92,11 +92,10 @@ public class OrderService {
 
     @CelestaTransaction
     public void createOrder(CallContext ctx, String id, String customer) {
-        try (OrderHeaderCursor order = new OrderHeaderCursor(ctx)) {
-            order.setId(id);
-            order.setCustomer(customer);
-            order.insert();
-        }
+        OrderHeaderCursor order = new OrderHeaderCursor(ctx)
+            order.setId(id)
+                 .setCustomer(customer)
+                 .insert();
     }
 }
 ```
@@ -104,9 +103,9 @@ public class OrderService {
 The caller supplies a `CallContext` (which carries the current user identity):
 
 ```java
-try (CallContext ctx = new CallContext("alice")) {
-    orderService.createOrder(ctx, "ORD-1", "ACME");
-}
+CallContext ctx = new CallContext("alice");
+//orderService must be a Spring bean
+orderService.createOrder(ctx, "ORD-1", "ACME");
 ```
 
 ## The `@CelestaTransaction` annotation
