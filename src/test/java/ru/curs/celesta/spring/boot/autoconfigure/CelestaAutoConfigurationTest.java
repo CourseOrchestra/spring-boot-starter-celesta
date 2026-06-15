@@ -9,7 +9,9 @@ import ru.curs.celesta.DatasourceConnectionPool;
 
 import javax.sql.DataSource;
 import java.io.File;
+import java.sql.Connection;
 import java.sql.SQLException;
+import java.sql.Statement;
 import java.util.Properties;
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -33,11 +35,12 @@ public class CelestaAutoConfigurationTest {
                         Properties p = celesta.getSetupProperties();
 
                         assertAll(
-                                () -> assertEquals(4, p.size()),
+                                () -> assertEquals(5, p.size()),
                                 () -> assertEquals("true", p.getProperty("h2.in-memory")),
                                 () -> assertEquals("false", p.getProperty("h2.referential.integrity")),
                                 () -> assertEquals("false", p.getProperty("skip.dbupdate")),
-                                () -> assertEquals("false", p.getProperty("force.dbinitialize"))
+                                () -> assertEquals("false", p.getProperty("force.dbinitialize")),
+                                () -> assertEquals("false", p.getProperty("log.logins"))
                         );
                         shutDownH2(celesta);
                     }
@@ -45,7 +48,10 @@ public class CelestaAutoConfigurationTest {
     }
 
     private void shutDownH2(Celesta celesta) throws SQLException {
-        celesta.getConnectionPool().get().createStatement().execute("SHUTDOWN");
+        try (Connection connection = celesta.getConnectionPool().get();
+             Statement statement = connection.createStatement()) {
+            statement.execute("SHUTDOWN");
+        }
     }
 
 
@@ -72,7 +78,7 @@ public class CelestaAutoConfigurationTest {
                         Properties p = celesta.getSetupProperties();
 
                         assertAll(
-                                () -> assertEquals(9, p.size()),
+                                () -> assertEquals(10, p.size()),
                                 () -> assertEquals(
                                         "jdbc:h2:mem:celesta;DB_CLOSE_DELAY=-1",
                                         p.getProperty("rdbms.connection.url")
@@ -84,6 +90,7 @@ public class CelestaAutoConfigurationTest {
                                 () -> assertEquals("1234", p.getProperty("h2.port")),
                                 () -> assertEquals("true", p.getProperty("skip.dbupdate")),
                                 () -> assertEquals("true", p.getProperty("force.dbinitialize")),
+                                () -> assertEquals("true", p.getProperty("log.logins")),
                                 () -> assertEquals(
                                         "ru.curs.celesta.spring.boot,ru.curs.celesta.spring",
                                         p.getProperty("celestaScan")
@@ -133,7 +140,7 @@ public class CelestaAutoConfigurationTest {
                     try (Celesta celesta = context.getBean(Celesta.class)) {
                         //Celesta bean is registered
                         assertNotNull(context.getBean(Celesta.class));
-                        assertTrue(celesta.getConnectionPool() instanceof DatasourceConnectionPool);
+                        assertInstanceOf(DatasourceConnectionPool.class, celesta.getConnectionPool());
                         shutDownH2(celesta);
                     }
                 }));
