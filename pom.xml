@@ -54,6 +54,7 @@
         <maven.checkstyle.plugin.version>3.6.0</maven.checkstyle.plugin.version>
         <maven.compiler.plugin.version>3.15.0</maven.compiler.plugin.version>
         <maven.jar.plugin.version>3.4.2</maven.jar.plugin.version>
+        <maven.resources.plugin.version>3.5.0</maven.resources.plugin.version>
         <maven.javadoc.plugin.version>3.11.2</maven.javadoc.plugin.version>
         <maven.site.plugin.version>3.21.0</maven.site.plugin.version>
         <maven.source.plugin.version>3.3.1</maven.source.plugin.version>
@@ -131,6 +132,18 @@
 
     <build>
         <plugins>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-resources-plugin</artifactId>
+                <version>${maven.resources.plugin.version}</version>
+                <configuration>
+                    <!-- Keep VCS placeholder files (e.g. testScore/.gitignore) so that
+                         otherwise-empty resource directories are still copied to the
+                         classpath. Without this, default excludes drop .gitignore and the
+                         testScore directory disappears, breaking score-path resolution. -->
+                    <addDefaultExcludes>false</addDefaultExcludes>
+                </configuration>
+            </plugin>
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-compiler-plugin</artifactId>
