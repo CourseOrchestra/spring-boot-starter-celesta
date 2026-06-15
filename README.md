@@ -1,7 +1,7 @@
 # spring-boot-starter-celesta
 
 [![build](https://github.com/CourseOrchestra/spring-boot-starter-celesta/actions/workflows/main.yml/badge.svg)](https://github.com/CourseOrchestra/spring-boot-starter-celesta/actions/workflows/main.yml)
-[![Maven Central](https://maven-badges.herokuapp.com/maven-central/ru.curs/spring-boot-starter-celesta/badge.svg)](https://maven-badges.herokuapp.com/maven-central/ru.curs/spring-boot-starter-celesta)
+[![Maven Central](https://img.shields.io/maven-central/v/ru.curs/spring-boot-starter-celesta)](https://central.sonatype.com/artifact/ru.curs/spring-boot-starter-celesta)
 
 Spring Boot starter that auto-configures [Celesta](https://courseorchestra.github.io/celesta/en/)
 inside a Spring Boot application.
