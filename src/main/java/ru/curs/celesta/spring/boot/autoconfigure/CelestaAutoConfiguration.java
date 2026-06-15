@@ -2,12 +2,12 @@ package ru.curs.celesta.spring.boot.autoconfigure;
 
 import org.springframework.beans.factory.ObjectProvider;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.autoconfigure.AutoConfiguration;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnBean;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.boot.context.properties.PropertyMapper;
 import org.springframework.context.annotation.Bean;
-import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.EnableAspectJAutoProxy;
 import org.springframework.core.io.Resource;
 import org.springframework.core.io.ResourceLoader;
@@ -24,6 +24,7 @@ import ru.curs.celesta.transaction.CelestaTransactionAspect;
 import javax.sql.DataSource;
 import java.io.File;
 import java.io.IOException;
+import java.io.UncheckedIOException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -35,7 +36,7 @@ import java.util.Properties;
  *
  * @since 1.0.0
  */
-@Configuration
+@AutoConfiguration
 @EnableConfigurationProperties(CelestaProperties.class)
 @EnableAspectJAutoProxy
 public class CelestaAutoConfiguration {
@@ -118,6 +119,8 @@ public class CelestaAutoConfiguration {
                 .to(x -> properties.put("skip.dbupdate", String.valueOf(x)));
         map.from(celestaProperties::isForceDbInitialize)
                 .to(x -> properties.put("force.dbinitialize", String.valueOf(x)));
+        map.from(celestaProperties::isLogLogins)
+                .to(x -> properties.put("log.logins", String.valueOf(x)));
 
         return Celesta.createInstance(properties, connectionPool);
     }
@@ -150,7 +153,7 @@ public class CelestaAutoConfiguration {
         try {
             return resource.getFile();
         } catch (IOException ex) {
-            throw new RuntimeException(ex); // This should never happen though
+            throw new UncheckedIOException(ex); // This should never happen though
         }
     }
 

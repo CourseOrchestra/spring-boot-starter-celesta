@@ -13,7 +13,9 @@ import ru.curs.celesta.SystemCallContext;
 import ru.curs.celesta.dbutils.IProfiler;
 import ru.curs.celesta.spring.boot.autoconfigure.CelestaAutoConfiguration;
 
+import java.sql.Connection;
 import java.sql.SQLException;
+import java.sql.Statement;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
@@ -113,7 +115,10 @@ public class CelestaTransactionTest {
     }
 
     private void shutDownH2(Celesta celesta) throws SQLException {
-        celesta.getConnectionPool().get().createStatement().execute("SHUTDOWN");
+        try (Connection connection = celesta.getConnectionPool().get();
+             Statement statement = connection.createStatement()) {
+            statement.execute("SHUTDOWN");
+        }
     }
 
     @Test
