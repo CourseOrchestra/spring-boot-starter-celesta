@@ -45,6 +45,7 @@ public class CelestaAutoConfiguration {
     private ResourceLoader resourceLoader;
 
     /**
+     * Creates connection pool for Celesta.
      *
      * @param celestaProperties Configuration properties
      * @param dataSourceObjectProvider Provider for {@link DataSource}
@@ -73,13 +74,13 @@ public class CelestaAutoConfiguration {
     }
 
     /**
+     * Creates Celesta bean.
+     *
      * @param celestaProperties configuration properties
      * @param connectionPool connection pool
      * @return Configured Celesta
      * @throws IOException if score path is unavailable
      * @since 1.0.0
-     * <p>
-     * Creates Celesta bean
      */
     @Bean
     @ConditionalOnMissingBean
