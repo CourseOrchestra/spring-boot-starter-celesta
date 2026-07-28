@@ -5,9 +5,9 @@ import org.springframework.boot.context.properties.ConfigurationProperties;
 import java.util.LinkedHashSet;
 
 /**
- * @since 1.0.0
+ * Configuration properties for Celesta.
  *
- * Configuration properties for Celesta
+ * @since 1.0.0
  */
 @ConfigurationProperties(prefix = "celesta")
 public class CelestaProperties {
@@ -77,9 +77,9 @@ public class CelestaProperties {
     }
 
     /**
-     * @since 1.0.0
+     * Configuration properties for Celesta jdbc connection.
      *
-     * Configuration properties for Celesta jdbc connection
+     * @since 1.0.0
      */
     public static class JdbcProperties {
         private String url;
@@ -112,9 +112,9 @@ public class CelestaProperties {
     }
 
     /**
-     * @since 1.0.0
+     * Configuration properties for Celesta H2 db.
      *
-     * Configuration properties for Celesta H2 db
+     * @since 1.0.0
      */
     public static class H2Properties {
         private boolean inMemory = false;
