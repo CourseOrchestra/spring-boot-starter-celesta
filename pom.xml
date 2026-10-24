@@ -46,7 +46,7 @@
         <maven.compiler.release>17</maven.compiler.release>
 
         <!--dependency versions -->
-        <celesta.version>8.2.1</celesta.version>
+        <celesta.version>8.2.2</celesta.version>
         <checkstyle.version>14.3.0</checkstyle.version>
         <spring.boot.version>3.5.15</spring.boot.version>
 
